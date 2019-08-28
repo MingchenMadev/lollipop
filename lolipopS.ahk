@@ -41,26 +41,16 @@ $MButton::  ;鼠标中键为宏开关键，可修改为其它键
 	}
 	else 
 	{
-		SetTimer, MouseLButton, 50         ;左键连点计时器，会自动拾取
-		SetTimer, Lollipop, 50             ;棒棒糖相关的
+		send q
 		sleep 100
 		send w
+		SetTimer, MouseLButton, 50         ;左键连点计时器，会自动拾取
+		SetTimer, Lollipop, 50             ;棒棒糖相关的
+
 	}
 }
 Return 
 
-$q::  ;按q键手动开黑人后，自动开罩子
-{ 
-    send q
-	if (masterFlag=1) 
-	{
-		clickFlag := 1         ;开启黑人后启动左键连点
-		sleep 600
-		send w
-		SetTimer, closeClick, -20000   ;黑人结束后关闭连点
-    }
-}
-Return 
 
 $XButton1::  ;开关鼠标连点，键时鼠标第四键，可修改
 { 
@@ -114,6 +104,11 @@ Lollipop:
         clickFlag := 0
     }
 	return
+}
+
+RandSleep(x,y) {
+	Random, rand, %x%, %y%
+	Sleep %rand%
 }
 
 ~=::Pause  ;宏暂停或继续
