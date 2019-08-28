@@ -25,9 +25,6 @@ clickFlag = 0 ;控制左键连点的变量
 
 $MButton::  ;鼠标中键为宏开关键，可修改为其它键
 { 
-	WinGetPos,X,Y,Width, Height, A ;判断你的游戏窗口分辨率
-	PixelGetColor, colorH, Ceil(Width*0.4412), Ceil(Height*0.9574) ;寻找你“4”技能图标位置
-	scolor := SubStr(colorH, 3, 1);PixelGetColor, color2, 1145, 1370
 	if(masterFlag=0){
 		masterFlag := 1
 		clickFlag := 1
@@ -42,12 +39,23 @@ $MButton::  ;鼠标中键为宏开关键，可修改为其它键
 		SetTimer, MouseLButton, off  ;关闭左键连点计时器，off不可改动
 		SetTimer, Lollipop, off  ;关闭
 	}
-	else 
+}
+Return 
+
+
+$q::  ;q键为宏开关键，可修改为其它键
+{
+	WinGetPos,X,Y,Width, Height, A ;判断你的游戏窗口分辨率
+	PixelGetColor, colorH, Ceil(Width*0.4412), Ceil(Height*0.9574) ;寻找你“4”技能图标位置
+	scolor := SubStr(colorH, 3, 1);PixelGetColor, color2, 1145, 1370
+	if (masterFlag=1) 
 	{
 		send {q}
 		if (scolor = 1)
 		{
 			send {w}
+			sleep 600
+			clickFlag := 1
 			SetTimer, MouseLButton, 50         ;左键连点计时器，会自动拾取
 			SetTimer, Lollipop, 50             ;棒棒糖相关的
 		}
@@ -60,8 +68,7 @@ $MButton::  ;鼠标中键为宏开关键，可修改为其它键
 		}
 	}
 }
-Return 
-
+Return
 
 $XButton1::  ;开关鼠标连点，键时鼠标第四键，可修改
 { 
