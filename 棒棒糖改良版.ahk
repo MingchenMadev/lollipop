@@ -14,28 +14,20 @@ F 风暴护甲
 SetKeyDelay, 50
 SetMouseDelay, 50
 
-masterFlag = 0  ;宏控制变量
+masterFlag = 1  ;宏控制变量
 clickFlag = 0 ;控制左键连点的变量
 WinGetPos,X,Y,Width, Height, A ;判断你的游戏窗口分辨率
+Toggle = 0 ;
+Pause ;
 
 
-$MButton::  ;鼠标中键为宏开关键，可修改为其它键
-{ 
-	if(masterFlag=0){
-		masterFlag := 1
-		clickFlag := 1
-	}
-	else{
-		masterFlag := 0
-		clickFlag := 0
-	}
-
-	if (masterFlag=0) 
-	{
-		SetTimer, MouseLButton, off  ;关闭左键连点计时器，off不可改动
-		SetTimer, Lollipop, off  ;关闭
-		clickFlag := 0
-	}	
+$C::  ;鼠标中键为宏开关键，可修改为其它键
+{
+	SetTimer, MouseLButton, 50 ;
+	SetTimer, Lollipop, 50  ;
+	clickFlag := 1;
+	SetTimer, Always, 500 ;
+	masterFlag = 1;
 }
 Return 
 
@@ -46,51 +38,32 @@ Always:
 	scolor := SubStr(colorH, 3, 1) ;PixelGetColor, color2, 1145, 1370
 	if (scolor = 1)
 	{
-		SetTimer, MouseLButton, 50 ;
-		SetTimer, Lollipop, 50  ;
+		masterflag := 1
+		clickFlag := 1
+	}
+	else
+	{
+		masterflag := 0
+		clickFlag := 0
 	}
 }
 Return
 
-$x::
+
+$q::  ;x键为宏开关键，可修改为其它键
 {
+	send {q}
+	RandSleep(300,700)
 	WinGetPos,X,Y,Width, Height, A ;判断你的游戏窗口分辨率
 	PixelGetColor, colorH, Ceil(Width*0.4412), Ceil(Height*0.9574) ;寻找你“4”技能图标位置
 	scolor := SubStr(colorH, 3, 1) ;PixelGetColor, color2, 1145, 1370
 	if (scolor = 1)
 	{
 		SetTimer, MouseLButton, 50 ;
-		SetTimer, Lollipop, 50  ;
-	}
-}
-Return
-
-$f12::
-{
-
-Pause
-
-Suspend
-
-}
-Return
-
-$q::  ;q键为宏开关键，可修改为其它键
-{
-	if (masterFlag=1) 
-	{	
-		send {q}
-		RandSleep(300,700)
-		WinGetPos,X,Y,Width, Height, A ;判断你的游戏窗口分辨率
-		PixelGetColor, colorH, Ceil(Width*0.4412), Ceil(Height*0.9574) ;寻找你“4”技能图标位置
-		scolor := SubStr(colorH, 3, 1) ;PixelGetColor, color2, 1145, 1370
-		if (scolor = 1)
-		{
-		SetTimer, MouseLButton, 50 ;
 		send {w}
-		SetTimer, Lollipop, 50  ;
-		}
+		SetTimer, Lollipop, 50 ;
 	}
+	SetTimer, Always, 500 ;
 }
 Return
 
@@ -114,18 +87,20 @@ Return
 ~I::   ;按I查看悬赏关闭宏
 ~P::   ;按P查看悬赏关闭宏
 ~Tab:: ;查看小地图临时关闭宏，再按TAB键继续宏
-~C:: ;查看小地图临时关闭宏，再按C键继续宏
 {
 	SetTimer, MouseLButton, off  ;关闭左键连点计时器，off不可改动
 	SetTimer, Lollipop, off  ;关闭
+	SetTimer, Always, off ; 关闭
 	masterFlag := 0
 	clickFlag := 0
 }
 Return
 
+$MButton::Pause ;宏暂停或继续
+
 MouseLButton:   ;左键连点计时器设置
 {
-	if(clickFlag = 1){
+	if(clickFlag = 1 and masterflag = 1){
 		Click    ;点击鼠标左键，对应主要技能
 	}
 }
@@ -137,23 +112,14 @@ Lollipop:
 	scolor := SubStr(colorH, 3, 1) ;PixelGetColor, color2, 1145, 1370
 	if (scolor = 1)
 	{
-		send {q} ;q为变身后无脑使用的寒冰轰击的快捷键，可自行修改
+		if(masterFlag = 1){
+			send {q} ;q为变身后无脑使用的寒冰轰击的快捷键，可自行修改
+		}
 	}
-	else{
-		SetTimer, MouseLButton, off  ;关闭左键连点计时器，off不可改动
-		SetTimer, Lollipop, off  ;关闭	
-	}
-
-    if (colorH = 0x0824608) ;如果死亡，自动停止左键连点
-    {
-        clickFlag := 0
-    }
 	return
 }
 
 RandSleep(x,y) {
 	Random, rand, %x%, %y%
-	Sleep %rand%
+	return rand
 }
-
-~=::Pause  ;宏暂停或继续
