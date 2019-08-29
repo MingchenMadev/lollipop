@@ -23,10 +23,10 @@ Pause ;
 
 $C::  ;鼠标中键为宏开关键，可修改为其它键
 {
-	SetTimer, MouseLButton, 50 ;
+	SetTimer, MouseLButton, 10 ;
 	SetTimer, Lollipop, 50  ;
-	clickFlag := 1;
-	SetTimer, Always, 500 ;
+	clickFlag := 1 ;
+	SetTimer, Always, 50 ;
 	masterFlag = 1;
 }
 Return 
@@ -59,7 +59,7 @@ $q::  ;x键为宏开关键，可修改为其它键
 	scolor := SubStr(colorH, 3, 1) ;PixelGetColor, color2, 1145, 1370
 	if (scolor = 1)
 	{
-		SetTimer, MouseLButton, 50 ;
+		SetTimer, MouseLButton, 10 ;
 		send {w}
 		SetTimer, Lollipop, 50 ;
 	}
