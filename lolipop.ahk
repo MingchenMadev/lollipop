@@ -134,4 +134,8 @@ RandSleep(x,y) {
 	Sleep %rand%
 }
 
-~=::Pause  ;宏暂停或继续
+$F9::  ;
+{ 
+	Pause
+}
+Return   ;宏暂停或继续
