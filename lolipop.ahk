@@ -14,12 +14,12 @@ F 风暴护甲
 SetKeyDelay, 50
 SetMouseDelay, 50
 
-masterFlag = 0  ;宏控制变量
-clickFlag = 0 ;控制左键连点的变量
+masterFlag = 1  ;宏控制变量
+clickFlag = 1 ;控制左键连点的变量
 WinGetPos,X,Y,Width, Height, A ;判断你的游戏窗口分辨率
 
 
-$MButton::  ;鼠标中键为宏开关键，可修改为其它键
+$F1::  ;鼠标中键为宏开关键，可修改为其它键
 { 
 	if(masterFlag=0){
 		masterFlag := 1
@@ -39,7 +39,7 @@ $MButton::  ;鼠标中键为宏开关键，可修改为其它键
 }
 Return 
 
-Always:
+$MButton::
 {
 	WinGetPos,X,Y,Width, Height, A ;判断你的游戏窗口分辨率
 	PixelGetColor, colorH, Ceil(Width*0.4412), Ceil(Height*0.9574) ;寻找你“4”技能图标位置
@@ -49,27 +49,6 @@ Always:
 		SetTimer, MouseLButton, 50 ;
 		SetTimer, Lollipop, 50  ;
 	}
-}
-Return
-
-$x::
-{
-	WinGetPos,X,Y,Width, Height, A ;判断你的游戏窗口分辨率
-	PixelGetColor, colorH, Ceil(Width*0.4412), Ceil(Height*0.9574) ;寻找你“4”技能图标位置
-	scolor := SubStr(colorH, 3, 1) ;PixelGetColor, color2, 1145, 1370
-	if (scolor = 1)
-	{
-		SetTimer, MouseLButton, 50 ;
-		SetTimer, Lollipop, 50  ;
-	}
-}
-Return
-
-$c::
-{
-	SetTimer, MouseLButton, off ;
-	SetTimer, Lollipop, off  ;
-	clickFlag := 0 
 }
 Return
 
@@ -84,9 +63,9 @@ $q::  ;q键为宏开关键，可修改为其它键
 		scolor := SubStr(colorH, 3, 1) ;PixelGetColor, color2, 1145, 1370
 		if (scolor = 1)
 		{
-		SetTimer, MouseLButton, 50 ;
-		send {w}
-		SetTimer, Lollipop, 50  ;
+			SetTimer, MouseLButton, 50 ;
+			send {w}
+			SetTimer, Lollipop, 50  ;
 		}
 	}
 }
@@ -112,6 +91,7 @@ Return
 ~I::   ;按I查看悬赏关闭宏
 ~P::   ;按P查看悬赏关闭宏
 ~Tab:: ;查看小地图临时关闭宏，再按TAB键继续宏
+~C:: ;
 {
 	SetTimer, MouseLButton, off  ;关闭左键连点计时器，off不可改动
 	SetTimer, Lollipop, off  ;关闭
